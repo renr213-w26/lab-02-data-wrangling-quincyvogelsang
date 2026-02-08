@@ -69,6 +69,22 @@ midwest |>
 
 \newpage
 
+### Question 4
+
+```{r}
+
+midwest |>
+  summarize(
+    typical_density = median(popdensity),
+    q1 = quantile(popdensity, 0.25),
+    q3 = quantile(popdensity, 0.75)
+  )
+```
+
+The distribution of population density of counties is unimodal and extremely right-skewed. A typical Midwestern county has population density of 1156.208 people per unit area. The middle 50% of the counties have population densities between 622.4074 to 2330 people per unit area.
+
+\newpage
+
 ### Question 5
 
 \newpage
