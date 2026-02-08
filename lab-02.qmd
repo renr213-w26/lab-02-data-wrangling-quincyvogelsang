@@ -51,6 +51,22 @@ midwest |>
 
 ### Question 3
 
+```{r}
+
+midwest |>
+  filter(popdensity > 25000) |>
+  arrange(desc(popdensity)) |>
+  select(county, state, popdensity, poptotal, area)
+
+```
+
+```{r}
+
+midwest |>
+  filter(popdensity == max(popdensity)) |>
+  select(county, state, popdensity, poptotal, area)
+```
+
 \newpage
 
 ### Question 5
