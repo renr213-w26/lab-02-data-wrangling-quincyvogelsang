@@ -40,6 +40,13 @@ The highest number of counties can be found in IL with 102 counties. The lowest 
 
 ### Question 2
 
+```{r}
+midwest |>
+  group_by(county) |>
+  summarize(n_states = n()) |>
+  filter(n_states == 5)
+```
+
 \newpage
 
 ### Question 3
