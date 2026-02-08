@@ -1,13 +1,11 @@
 ---
 title: "Lab 2 - Data wrangling"
-author: "John Q. Student"
-date: "June 24, 1497"
+author: "Quincy Vogelsang"
+date: "February 7, 2026"
 format: 
   html: default # for speed
   pdf: default # for final output
-
 ---
-
 
 ```{r}
 #| eval: true
@@ -16,13 +14,11 @@ format:
 library(tidyverse)
 ```
 
-
 # Questions
 
 ## Part 1
 
 ### Question 1
-
 
 \newpage
 
@@ -31,6 +27,7 @@ library(tidyverse)
 \newpage
 
 ### Question 3
+
 \newpage
 
 ### Question 5
@@ -51,6 +48,4 @@ library(tidyverse)
 
 ## Part 2
 
-
 ### Question 9
-
