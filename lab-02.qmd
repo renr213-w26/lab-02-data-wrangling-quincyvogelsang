@@ -1,7 +1,7 @@
 ---
 title: "Lab 2 - Data wrangling"
 author: "Quincy Vogelsang"
-date: "February 7, 2026"
+date: "February 8, 2026"
 format: 
   html: default # for speed
   pdf: default # for final output
@@ -18,7 +18,23 @@ library(tidyverse)
 
 ## Part 1
 
+```{r}
+?midwest
+
+glimpse(midwest)
+```
+
 ### Question 1
+
+```{r}
+midwest |>
+  group_by(state) |>
+  summarize(counties = n()) |>
+  arrange(desc(counties))
+  
+```
+
+The highest number of counties can be found in IL with 102 counties. The lowest number of counties can be found in WI with 72 counties.
 
 \newpage
 
