@@ -100,6 +100,48 @@ midwest |>
 
 ### Question 6
 
+```{r}
+midwest |>
+  filter(percbelowpoverty > 40, percollege < 10) |>
+  select(county, state, percbelowpoverty, percollege)
+```
+
+```{r}
+midwest |>
+  filter(percollege > 40) |>
+  select(county, state, percbelowpoverty, percollege)
+```
+
+```{r}
+midwest |>
+  filter(percbelowpoverty > 40 & percollege < 10 | percollege > 40) |>
+  select(county, state, percbelowpoverty, percollege)
+```
+
+```{r}
+midwest |> 
+  mutate(potential_outlier = if_else(
+    percbelowpoverty > 40 & percollege < 10 | percollege > 40, "Yes", "No"
+  )) |>
+  select(county, state, percbelowpoverty, percollege, potential_outlier) |>
+  arrange(potential_outlier)
+```
+
+```{r}
+midwest |> 
+  mutate(potential_outlier = if_else(
+    percbelowpoverty > 40 & percollege < 10 | percollege > 40, "Yes", "No"
+  )) |>
+  ggplot(aes(x = percollege, y = percbelowpoverty, colour = potential_outlier, shape = state)) +
+  geom_point() +
+  labs(
+    x = "% college educated",
+    y = "% below poverty",
+    title = "Percentage with a college degree versus poverty rate",
+    subtitle = "by State in the Midwest"
+  )
+```
+
 \newpage
 
 ### Question 7
