@@ -1,7 +1,7 @@
 ---
 title: "Lab 2 - Data wrangling"
 author: "Quincy Vogelsang"
-date: "February 8, 2026"
+date: "February 11, 2026"
 format: 
   html: default # for speed
   pdf: default # for final output
@@ -145,6 +145,25 @@ midwest |>
 \newpage
 
 ### Question 7
+
+```{r}
+state_population <- midwest |>
+  group_by(state) |>
+  summarise(state_totalpop = sum(poptotal)) |>
+  arrange(desc(state_totalpop))
+
+state_population
+```
+
+```{r}
+state_proportions <- state_population |>
+  mutate(prop_population = state_totalpop/sum(state_totalpop))|>
+  arrange(desc(prop_population))
+
+state_proportions
+```
+
+C. IL is the most populous state and 27.2% of the midwest population lives there. The least populous state is WI, with 11.6% of the midwest population living there.
 
 \newpage
 
