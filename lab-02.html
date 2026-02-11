@@ -1,0 +1,986 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.8.27">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Quincy Vogelsang">
+<meta name="dcterms.date" content="2026-02-11">
+
+<title>Lab 2 - Data wrangling</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="lab-02_files/libs/clipboard/clipboard.min.js"></script>
+<script src="lab-02_files/libs/quarto-html/quarto.js" type="module"></script>
+<script src="lab-02_files/libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="lab-02_files/libs/quarto-html/axe/axe-check.js" type="module"></script>
+<script src="lab-02_files/libs/quarto-html/popper.min.js"></script>
+<script src="lab-02_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="lab-02_files/libs/quarto-html/anchor.min.js"></script>
+<link href="lab-02_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="lab-02_files/libs/quarto-html/quarto-syntax-highlighting-ed96de9b727972fe78a7b5d16c58bf87.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="lab-02_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="lab-02_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="lab-02_files/libs/bootstrap/bootstrap-6a8e6d95bfcd174082ff54166b04dcf7.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+
+
+</head>
+
+<body class="quarto-light">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+<div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="lab-02.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></div>
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Lab 2 - Data wrangling</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Quincy Vogelsang </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">February 11, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</div>
+<section id="questions" class="level1">
+<h1>Questions</h1>
+<section id="part-1" class="level2">
+<h2 class="anchored" data-anchor-id="part-1">Part 1</h2>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>?midwest</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(midwest)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 437
+Columns: 28
+$ PID                  &lt;int&gt; 561, 562, 563, 564, 565, 566, 567, 568, 569, 570,…
+$ county               &lt;chr&gt; "ADAMS", "ALEXANDER", "BOND", "BOONE", "BROWN", "…
+$ state                &lt;chr&gt; "IL", "IL", "IL", "IL", "IL", "IL", "IL", "IL", "…
+$ area                 &lt;dbl&gt; 0.052, 0.014, 0.022, 0.017, 0.018, 0.050, 0.017, …
+$ poptotal             &lt;int&gt; 66090, 10626, 14991, 30806, 5836, 35688, 5322, 16…
+$ popdensity           &lt;dbl&gt; 1270.9615, 759.0000, 681.4091, 1812.1176, 324.222…
+$ popwhite             &lt;int&gt; 63917, 7054, 14477, 29344, 5264, 35157, 5298, 165…
+$ popblack             &lt;int&gt; 1702, 3496, 429, 127, 547, 50, 1, 111, 16, 16559,…
+$ popamerindian        &lt;int&gt; 98, 19, 35, 46, 14, 65, 8, 30, 8, 331, 51, 26, 17…
+$ popasian             &lt;int&gt; 249, 48, 16, 150, 5, 195, 15, 61, 23, 8033, 89, 3…
+$ popother             &lt;int&gt; 124, 9, 34, 1139, 6, 221, 0, 84, 6, 1596, 20, 7, …
+$ percwhite            &lt;dbl&gt; 96.71206, 66.38434, 96.57128, 95.25417, 90.19877,…
+$ percblack            &lt;dbl&gt; 2.57527614, 32.90043290, 2.86171703, 0.41225735, …
+$ percamerindan        &lt;dbl&gt; 0.14828264, 0.17880670, 0.23347342, 0.14932156, 0…
+$ percasian            &lt;dbl&gt; 0.37675897, 0.45172219, 0.10673071, 0.48691813, 0…
+$ percother            &lt;dbl&gt; 0.18762294, 0.08469791, 0.22680275, 3.69733169, 0…
+$ popadults            &lt;int&gt; 43298, 6724, 9669, 19272, 3979, 23444, 3583, 1132…
+$ perchsd              &lt;dbl&gt; 75.10740, 59.72635, 69.33499, 75.47219, 68.86152,…
+$ percollege           &lt;dbl&gt; 19.63139, 11.24331, 17.03382, 17.27895, 14.47600,…
+$ percprof             &lt;dbl&gt; 4.355859, 2.870315, 4.488572, 4.197800, 3.367680,…
+$ poppovertyknown      &lt;int&gt; 63628, 10529, 14235, 30337, 4815, 35107, 5241, 16…
+$ percpovertyknown     &lt;dbl&gt; 96.27478, 99.08714, 94.95697, 98.47757, 82.50514,…
+$ percbelowpoverty     &lt;dbl&gt; 13.151443, 32.244278, 12.068844, 7.209019, 13.520…
+$ percchildbelowpovert &lt;dbl&gt; 18.011717, 45.826514, 14.036061, 11.179536, 13.02…
+$ percadultpoverty     &lt;dbl&gt; 11.009776, 27.385647, 10.852090, 5.536013, 11.143…
+$ percelderlypoverty   &lt;dbl&gt; 12.443812, 25.228976, 12.697410, 6.217047, 19.200…
+$ inmetro              &lt;int&gt; 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0…
+$ category             &lt;chr&gt; "AAR", "LHR", "AAR", "ALU", "AAR", "AAR", "LAR", …</code></pre>
+</div>
+</div>
+<section id="question-1" class="level3">
+<h3 class="anchored" data-anchor-id="question-1">Question 1</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>midwest <span class="sc">|&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">counties =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(counties))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  state counties
+  &lt;chr&gt;    &lt;int&gt;
+1 IL         102
+2 IN          92
+3 OH          88
+4 MI          83
+5 WI          72</code></pre>
+</div>
+</div>
+<p>The highest number of counties can be found in IL with 102 counties. The lowest number of counties can be found in WI with 72 counties.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="question-2" class="level3">
+<h3 class="anchored" data-anchor-id="question-2">Question 2</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>midwest <span class="sc">|&gt;</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(county) <span class="sc">|&gt;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">n_states =</span> <span class="fu">n</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(n_states <span class="sc">==</span> <span class="dv">5</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  county   n_states
+  &lt;chr&gt;       &lt;int&gt;
+1 CRAWFORD        5
+2 JACKSON         5
+3 MONROE          5</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="question-3" class="level3">
+<h3 class="anchored" data-anchor-id="question-3">Question 3</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>midwest <span class="sc">|&gt;</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(popdensity <span class="sc">&gt;</span> <span class="dv">25000</span>) <span class="sc">|&gt;</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(popdensity)) <span class="sc">|&gt;</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(county, state, popdensity, poptotal, area)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 9 × 5
+  county    state popdensity poptotal  area
+  &lt;chr&gt;     &lt;chr&gt;      &lt;dbl&gt;    &lt;int&gt; &lt;dbl&gt;
+1 COOK      IL        88018.  5105067 0.058
+2 MILWAUKEE WI        63952.   959275 0.015
+3 WAYNE     MI        60334.  2111687 0.035
+4 CUYAHOGA  OH        54313.  1412140 0.026
+5 DU PAGE   IL        39083.   781666 0.02 
+6 MARION    IN        34659.   797159 0.023
+7 HAMILTON  OH        34649.   866228 0.025
+8 FRANKLIN  OH        28278.   961437 0.034
+9 MACOMB    MI        25621.   717400 0.028</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>midwest <span class="sc">|&gt;</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(popdensity <span class="sc">==</span> <span class="fu">max</span>(popdensity)) <span class="sc">|&gt;</span></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(county, state, popdensity, poptotal, area)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 5
+  county state popdensity poptotal  area
+  &lt;chr&gt;  &lt;chr&gt;      &lt;dbl&gt;    &lt;int&gt; &lt;dbl&gt;
+1 COOK   IL        88018.  5105067 0.058</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="question-4" class="level3">
+<h3 class="anchored" data-anchor-id="question-4">Question 4</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>midwest <span class="sc">|&gt;</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">typical_density =</span> <span class="fu">median</span>(popdensity),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">q1 =</span> <span class="fu">quantile</span>(popdensity, <span class="fl">0.25</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">q3 =</span> <span class="fu">quantile</span>(popdensity, <span class="fl">0.75</span>)</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 3
+  typical_density    q1    q3
+            &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1           1156.  622.  2330</code></pre>
+</div>
+</div>
+<p>The distribution of population density of counties is unimodal and extremely right-skewed. A typical Midwestern county has population density of 1156.208 people per unit area. The middle 50% of the counties have population densities between 622.4074 to 2330 people per unit area.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="question-5" class="level3">
+<h3 class="anchored" data-anchor-id="question-5">Question 5</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>midwest <span class="ot">&lt;-</span> midwest <span class="sc">|&gt;</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">metro =</span> <span class="fu">if_else</span>(inmetro <span class="sc">==</span> <span class="dv">1</span>, <span class="st">"Yes"</span>, <span class="st">"No"</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>midwest <span class="sc">|&gt;</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">perc_urban =</span> <span class="fu">mean</span>(metro <span class="sc">==</span> <span class="st">"Yes"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  state perc_urban
+  &lt;chr&gt;      &lt;dbl&gt;
+1 IL         0.275
+2 IN         0.402
+3 MI         0.301
+4 OH         0.455
+5 WI         0.278</code></pre>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="question-6" class="level3">
+<h3 class="anchored" data-anchor-id="question-6">Question 6</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>midwest <span class="sc">|&gt;</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(percbelowpoverty <span class="sc">&gt;</span> <span class="dv">40</span>, percollege <span class="sc">&lt;</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(county, state, percbelowpoverty, percollege)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  county    state percbelowpoverty percollege
+  &lt;chr&gt;     &lt;chr&gt;            &lt;dbl&gt;      &lt;dbl&gt;
+1 MENOMINEE WI                48.7       7.34</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>midwest <span class="sc">|&gt;</span></span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(percollege <span class="sc">&gt;</span> <span class="dv">40</span>) <span class="sc">|&gt;</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(county, state, percbelowpoverty, percollege)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+  county    state percbelowpoverty percollege
+  &lt;chr&gt;     &lt;chr&gt;            &lt;dbl&gt;      &lt;dbl&gt;
+1 CHAMPAIGN IL               15.6        41.3
+2 DU PAGE   IL                2.71       42.8
+3 HAMILTON  IN                3.59       42.1
+4 WASHTENAW MI               12.2        48.1
+5 DANE      WI               10.5        43.6</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>midwest <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(percbelowpoverty <span class="sc">&gt;</span> <span class="dv">40</span> <span class="sc">&amp;</span> percollege <span class="sc">&lt;</span> <span class="dv">10</span> <span class="sc">|</span> percollege <span class="sc">&gt;</span> <span class="dv">40</span>) <span class="sc">|&gt;</span></span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(county, state, percbelowpoverty, percollege)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 4
+  county    state percbelowpoverty percollege
+  &lt;chr&gt;     &lt;chr&gt;            &lt;dbl&gt;      &lt;dbl&gt;
+1 CHAMPAIGN IL               15.6       41.3 
+2 DU PAGE   IL                2.71      42.8 
+3 HAMILTON  IN                3.59      42.1 
+4 WASHTENAW MI               12.2       48.1 
+5 DANE      WI               10.5       43.6 
+6 MENOMINEE WI               48.7        7.34</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>midwest <span class="sc">|&gt;</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">potential_outlier =</span> <span class="fu">if_else</span>(</span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    percbelowpoverty <span class="sc">&gt;</span> <span class="dv">40</span> <span class="sc">&amp;</span> percollege <span class="sc">&lt;</span> <span class="dv">10</span> <span class="sc">|</span> percollege <span class="sc">&gt;</span> <span class="dv">40</span>, <span class="st">"Yes"</span>, <span class="st">"No"</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">|&gt;</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(county, state, percbelowpoverty, percollege, potential_outlier) <span class="sc">|&gt;</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(potential_outlier)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 437 × 5
+   county    state percbelowpoverty percollege potential_outlier
+   &lt;chr&gt;     &lt;chr&gt;            &lt;dbl&gt;      &lt;dbl&gt; &lt;chr&gt;            
+ 1 ADAMS     IL               13.2        19.6 No               
+ 2 ALEXANDER IL               32.2        11.2 No               
+ 3 BOND      IL               12.1        17.0 No               
+ 4 BOONE     IL                7.21       17.3 No               
+ 5 BROWN     IL               13.5        14.5 No               
+ 6 BUREAU    IL               10.4        18.9 No               
+ 7 CALHOUN   IL               15.1        11.9 No               
+ 8 CARROLL   IL               11.7        16.2 No               
+ 9 CASS      IL               13.9        14.1 No               
+10 CHRISTIAN IL               11.7        13.6 No               
+# ℹ 427 more rows</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>midwest <span class="sc">|&gt;</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">potential_outlier =</span> <span class="fu">if_else</span>(</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>    percbelowpoverty <span class="sc">&gt;</span> <span class="dv">40</span> <span class="sc">&amp;</span> percollege <span class="sc">&lt;</span> <span class="dv">10</span> <span class="sc">|</span> percollege <span class="sc">&gt;</span> <span class="dv">40</span>, <span class="st">"Yes"</span>, <span class="st">"No"</span></span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>  )) <span class="sc">|&gt;</span></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x =</span> percollege, <span class="at">y =</span> percbelowpoverty, <span class="at">colour =</span> potential_outlier, <span class="at">shape =</span> state)) <span class="sc">+</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">"% college educated"</span>,</span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">"% below poverty"</span>,</span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a>    <span class="at">title =</span> <span class="st">"Percentage with a college degree versus poverty rate"</span>,</span>
+<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a>    <span class="at">subtitle =</span> <span class="st">"by State in the Midwest"</span></span>
+<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>  )</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="lab-02_files/figure-html/unnamed-chunk-13-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="question-7" class="level3">
+<h3 class="anchored" data-anchor-id="question-7">Question 7</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>state_population <span class="ot">&lt;-</span> midwest <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span></span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">state_totalpop =</span> <span class="fu">sum</span>(poptotal)) <span class="sc">|&gt;</span></span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(state_totalpop))</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>state_population</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  state state_totalpop
+  &lt;chr&gt;          &lt;int&gt;
+1 IL          11430602
+2 OH          10847115
+3 MI           9295297
+4 IN           5544159
+5 WI           4891769</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>state_proportions <span class="ot">&lt;-</span> state_population <span class="sc">|&gt;</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">prop_population =</span> state_totalpop<span class="sc">/</span><span class="fu">sum</span>(state_totalpop))<span class="sc">|&gt;</span></span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(prop_population))</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>state_proportions</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  state state_totalpop prop_population
+  &lt;chr&gt;          &lt;int&gt;           &lt;dbl&gt;
+1 IL          11430602           0.272
+2 OH          10847115           0.258
+3 MI           9295297           0.221
+4 IN           5544159           0.132
+5 WI           4891769           0.116</code></pre>
+</div>
+</div>
+<p>C. IL is the most populous state and 27.2% of the midwest population lives there. The least populous state is WI, with 11.6% of the midwest population living there.</p>
+<div style="page-break-after: always;"></div>
+</section>
+<section id="question-8" class="level3">
+<h3 class="anchored" data-anchor-id="question-8">Question 8</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>state_poverty <span class="ot">&lt;-</span> midwest <span class="sc">|&gt;</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(state) <span class="sc">|&gt;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_percbelowpoverty =</span> <span class="fu">mean</span>(percbelowpoverty))</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a>state_poverty</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  state mean_percbelowpoverty
+  &lt;chr&gt;                 &lt;dbl&gt;
+1 IL                     13.1
+2 IN                     10.3
+3 MI                     14.2
+4 OH                     13.0
+5 WI                     11.9</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>state_poverty <span class="sc">|&gt;</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(mean_percbelowpoverty)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 2
+  state mean_percbelowpoverty
+  &lt;chr&gt;                 &lt;dbl&gt;
+1 IN                     10.3
+2 WI                     11.9
+3 OH                     13.0
+4 IL                     13.1
+5 MI                     14.2</code></pre>
+</div>
+</div>
+<p>The lowest average mean percentage below poverty is in IN with 10.31%. The highest average percentage is in MI with 14.22%.</p>
+<div style="page-break-after: always;"></div>
+</section>
+</section>
+<section id="part-2" class="level2">
+<h2 class="anchored" data-anchor-id="part-2">Part 2</h2>
+<section id="question-9" class="level3">
+<h3 class="anchored" data-anchor-id="question-9">Question 9</h3>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>df <span class="ot">&lt;-</span> <span class="fu">tibble</span>(</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">var_1 =</span> <span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>, <span class="dv">40</span>, <span class="dv">50</span>),</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">var_2 =</span> <span class="fu">c</span>(<span class="st">"Pizza"</span>, <span class="st">"Burger"</span>, <span class="st">"Pizza"</span>, <span class="st">"Pizza"</span>, <span class="st">"Burger"</span>),</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">var_3 =</span> <span class="fu">c</span>(<span class="st">"Apple"</span>, <span class="st">"Apple"</span>, <span class="st">"Pear"</span>, <span class="st">"Pear"</span>, <span class="st">"Banana"</span>)</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>df</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  var_1 var_2  var_3 
+  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; 
+1    10 Pizza  Apple 
+2    20 Burger Apple 
+3    30 Pizza  Pear  
+4    40 Pizza  Pear  
+5    50 Burger Banana</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(var_2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+  var_1 var_2  var_3 
+  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; 
+1    20 Burger Apple 
+2    50 Burger Banana
+3    10 Pizza  Apple 
+4    30 Pizza  Pear  
+5    40 Pizza  Pear  </code></pre>
+</div>
+</div>
+<p>a. This code arranges the data from var_2 in ascending order. Since this is not numerical it will be ordered based on alphabetical order.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(var_2)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 3
+# Groups:   var_2 [2]
+  var_1 var_2  var_3 
+  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt; 
+1    10 Pizza  Apple 
+2    20 Burger Apple 
+3    30 Pizza  Pear  
+4    40 Pizza  Pear  
+5    50 Burger Banana</code></pre>
+</div>
+</div>
+<p>b. The group_by function does not show anything visible at the moment and the dataset looks the same as the original dataset. But it does form groups, but for R to be able to use later. If we do any calculations it can be grouped by group 1 pizza and group 2 burger.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(var_2) <span class="sc">|&gt;</span></span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_var_1 =</span> <span class="fu">mean</span>(var_1))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 2
+  var_2  mean_var_1
+  &lt;chr&gt;       &lt;dbl&gt;
+1 Burger       35  
+2 Pizza        26.7</code></pre>
+</div>
+</div>
+<p>c. First it tells R that calculations should be done per group, so that is why we have two groups in var_2. Then we tell it to do a calculation, calculation the mean of var_1 and make it a new variable.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(var_2, var_3) <span class="sc">|&gt;</span></span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_var_1 =</span> <span class="fu">mean</span>(var_1))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>`summarise()` has grouped output by 'var_2'. You can override using the
+`.groups` argument.</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+# Groups:   var_2 [2]
+  var_2  var_3  mean_var_1
+  &lt;chr&gt;  &lt;chr&gt;       &lt;dbl&gt;
+1 Burger Apple          20
+2 Burger Banana         50
+3 Pizza  Apple          10
+4 Pizza  Pear           35</code></pre>
+</div>
+</div>
+<p>d. Again we start by making groups for R to use. We group based on var_2 which is burger and pizza. But since we also group by var_3 we get two groups extra. Since we have got 2 options for each group of var_2. After this we do a calculation for the mean of var_1 again.</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(var_2, var_3) <span class="sc">|&gt;</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_var_1 =</span> <span class="fu">mean</span>(var_1), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  var_2  var_3  mean_var_1
+  &lt;chr&gt;  &lt;chr&gt;       &lt;dbl&gt;
+1 Burger Apple          20
+2 Burger Banana         50
+3 Pizza  Apple          10
+4 Pizza  Pear           35</code></pre>
+</div>
+</div>
+<p>e. The code is mostly the same as the previous code and gives us the same results. But for the previous one we got a message saying that summarise has grouped by var_2. But it did not use it. To remove it we use the .groups = drop function)</p>
+<div class="cell">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(var_2, var_3) <span class="sc">|&gt;</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">mean_var_1 =</span> <span class="fu">mean</span>(var_1), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 4 × 3
+  var_2  var_3  mean_var_1
+  &lt;chr&gt;  &lt;chr&gt;       &lt;dbl&gt;
+1 Burger Apple          20
+2 Burger Banana         50
+3 Pizza  Apple          10
+4 Pizza  Pear           35</code></pre>
+</div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>df <span class="sc">|&gt;</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(var_2, var_3) <span class="sc">|&gt;</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean_var_1 =</span> <span class="fu">mean</span>(var_1))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 5 × 4
+# Groups:   var_2, var_3 [4]
+  var_1 var_2  var_3  mean_var_1
+  &lt;dbl&gt; &lt;chr&gt;  &lt;chr&gt;       &lt;dbl&gt;
+1    10 Pizza  Apple          10
+2    20 Burger Apple          20
+3    30 Pizza  Pear           35
+4    40 Pizza  Pear           35
+5    50 Burger Banana         50</code></pre>
+</div>
+</div>
+<p>f. the summarise function adds the new variable as a new row and removes the other variable. The mutate action add the new variable as an extra so we get another row.</p>
+</section>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
