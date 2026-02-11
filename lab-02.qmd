@@ -189,3 +189,63 @@ The lowest average mean percentage below poverty is in IN with 10.31%. The highe
 ## Part 2
 
 ### Question 9
+
+```{r}
+df <- tibble(
+  var_1 = c(10, 20, 30, 40, 50),
+  var_2 = c("Pizza", "Burger", "Pizza", "Pizza", "Burger"),
+  var_3 = c("Apple", "Apple", "Pear", "Pear", "Banana")
+)
+
+df
+```
+
+```{r}
+df |>
+  arrange(var_2)
+```
+
+a\. This code arranges the data from var_2 in ascending order. Since this is not numerical it will be ordered based on alphabetical order.
+
+```{r}
+df |>
+  group_by(var_2)
+```
+
+b\. The group_by function does not show anything visible at the moment and the dataset looks the same as the original dataset. But it does form groups, but for R to be able to use later. If we do any calculations it can be grouped by group 1 pizza and group 2 burger.
+
+```{r}
+df |>
+  group_by(var_2) |>
+  summarize(mean_var_1 = mean(var_1))
+```
+
+c\. First it tells R that calculations should be done per group, so that is why we have two groups in var_2. Then we tell it to do a calculation, calculation the mean of var_1 and make it a new variable.
+
+```{r}
+df |>
+  group_by(var_2, var_3) |>
+  summarize(mean_var_1 = mean(var_1))
+```
+
+d\. Again we start by making groups for R to use. We group based on var_2 which is burger and pizza. But since we also group by var_3 we get two groups extra. Since we have got 2 options for each group of var_2. After this we do a calculation for the mean of var_1 again.
+
+```{r}
+df |>
+  group_by(var_2, var_3) |>
+  summarize(mean_var_1 = mean(var_1), .groups = "drop")
+```
+
+e\. The code is mostly the same as the previous code and gives us the same results. But for the previous one we got a message saying that summarise has grouped by var_2. But it did not use it. To remove it we use the .groups = drop function)
+
+```{r}
+df |>
+  group_by(var_2, var_3) |>
+  summarize(mean_var_1 = mean(var_1), .groups = "drop")
+
+df |>
+  group_by(var_2, var_3) |>
+  mutate(mean_var_1 = mean(var_1))
+```
+
+f\. the summarise function adds the new variable as a new row and removes the other variable. The mutate action add the new variable as an extra so we get another row.
